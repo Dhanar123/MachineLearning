@@ -1,0 +1,31 @@
+# Import required libraries
+from sklearn.feature_extraction import DictVectorizer
+from sklearn.naive_bayes import GaussianNB
+
+# Step 1: Create the dataset
+X = [
+    {'Attendance': 'High', 'StudyHours': 'High', 'InternalMarks': 'Good'},
+    {'Attendance': 'Medium', 'StudyHours': 'High', 'InternalMarks': 'Good'},
+    {'Attendance': 'Medium', 'StudyHours': 'Medium', 'InternalMarks': 'Average'},
+    {'Attendance': 'Low', 'StudyHours': 'Low', 'InternalMarks': 'Poor'},
+    {'Attendance': 'High', 'StudyHours': 'Medium', 'InternalMarks': 'Good'}
+]
+
+y = ['Pass', 'Pass', 'Fail', 'Fail', 'Pass']
+
+# Step 2: Convert categorical data to numerical format
+vectorizer = DictVectorizer(sparse=False)
+X_vectorized = vectorizer.fit_transform(X)
+
+# Step 3: Train Naïve Bayes model
+model = GaussianNB()
+model.fit(X_vectorized, y)
+
+# Step 4: Test data
+test_data = [{'Attendance': 'High', 'StudyHours': 'Medium', 'InternalMarks': 'Good'}]
+test_vectorized = vectorizer.transform(test_data)
+
+# Step 5: Prediction
+prediction = model.predict(test_vectorized)
+
+print("Predicted Result:", prediction[0])
