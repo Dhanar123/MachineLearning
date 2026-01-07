@@ -1,0 +1,38 @@
+# TASK 2: Student Result Prediction using Hugging Face Pretrained Model
+
+from transformers import pipeline
+
+# Load pretrained sentiment analysis model
+classifier = pipeline(
+    "sentiment-analysis",
+    model="distilbert-base-uncased-finetuned-sst-2-english"
+)
+
+# Dataset (converted to text format)
+data = [
+    "Attendance is High, StudyHours are High, InternalMarks are Good",
+    "Attendance is Medium, StudyHours are High, InternalMarks are Good",
+    "Attendance is Medium, StudyHours are Medium, InternalMarks are Average",
+    "Attendance is Low, StudyHours are Low, InternalMarks are Poor",
+    "Attendance is High, StudyHours are Medium, InternalMarks are Good"
+]
+
+actual_labels = ["Pass", "Pass", "Fail", "Fail", "Pass"]
+
+print("Hugging Face Pretrained Model Predictions:\n")
+
+for text, actual in zip(data, actual_labels):
+    result = classifier(text)[0]
+    sentiment = result["label"]
+    confidence = result["score"]
+
+    # Mapping sentiment to Pass/Fail
+    if sentiment == "POSITIVE":
+        predicted = "Pass"
+    else:
+        predicted = "Fail"
+
+    print(f"Input: {text}")
+    print(f"Predicted Result: {predicted} (Confidence: {confidence:.2f})")
+    print(f"Actual Result: {actual}")
+    print("-" * 60)
