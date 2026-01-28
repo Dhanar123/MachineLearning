@@ -1,0 +1,46 @@
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+
+# New dataset: 5 samples, 4 features
+X = np.array([
+    [50, 30, 20, 40],
+    [60, 45, 25, 50],
+    [55, 35, 30, 45],
+    [65, 50, 35, 55],
+    [70, 55, 40, 60]
+])
+
+print("Original Dataset:\n", X)
+
+# Standardize the dataset
+X_std = StandardScaler().fit_transform(X)
+print("\nStandardized Data:\n", X_std)
+
+# Compute covariance matrix
+cov_matrix = np.cov(X_std.T)
+print("\nCovariance Matrix:\n", cov_matrix)
+
+# Compute eigenvalues and eigenvectors
+eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+print("\nEigenvalues:\n", eigenvalues)
+print("\nEigenvectors:\n", eigenvectors)
+
+# Sort eigenvalues and eigenvectors in descending order
+idx = np.argsort(eigenvalues)[::-1]
+eigenvalues = eigenvalues[idx]
+eigenvectors = eigenvectors[:, idx]
+print("\nSorted Eigenvalues:\n", eigenvalues)
+print("\nSorted Eigenvectors:\n", eigenvectors)
+
+# Select top k principal components
+k = 2  # reducing to 2 dimensions
+principal_components = eigenvectors[:, :k]
+print("\nPrincipal Component Matrix:\n", principal_components)
+
+# Project the data onto principal components
+X_reduced = np.dot(X_std, principal_components)
+print("\nReduced Dataset (After PCA):\n", X_reduced)
+
+# Variance explained by each principal component
+variance_ratio = eigenvalues / np.sum(eigenvalues)
+print("\nVariance Percentage:\n", variance_ratio * 100)
